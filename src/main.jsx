@@ -30,10 +30,58 @@ function Navbar() {
   return <header className="header"><div className="scroll-progress" style={{ width: `${progress}%` }} /><div className="nav-wrap container"><a href="#home" className="wordmark" onClick={() => setOpen(false)}>Dwiky<span>.</span>CF</a><nav id="main-nav" aria-label="Main navigation" className={open ? 'nav-links open' : 'nav-links'}>{nav.map(n => <a key={n} href={`#${n.toLowerCase()}`} className={active === n.toLowerCase() ? 'active' : ''} aria-current={active === n.toLowerCase() ? 'location' : undefined} onClick={() => setOpen(false)}>{n}</a>)}</nav><a className="nav-contact" href="#contact">Let’s talk <ArrowUpRight size={16} /></a><button id="menu-toggle" className="menu-toggle" aria-expanded={open} aria-controls="main-nav" aria-label={open ? 'Close navigation' : 'Open navigation'} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button></div></header>;
 }
 
+function TypewriterRole() {
+  const [text, setText] = useState(profile.roles[0]);
+
+  useEffect(() => {
+    const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+    let timer;
+
+    const start = () => {
+      clearTimeout(timer);
+      if (motionPreference.matches) {
+        setText(profile.roles[0]);
+        return;
+      }
+
+      let roleIndex = 0;
+      let characterCount = 0;
+      let deleting = false;
+      setText('');
+
+      const tick = () => {
+        const role = profile.roles[roleIndex];
+        characterCount += deleting ? -1 : 1;
+        setText(role.slice(0, characterCount));
+
+        let delay = deleting ? 45 : 85;
+        if (!deleting && characterCount === role.length) {
+          deleting = true;
+          delay = 1900;
+        } else if (deleting && characterCount === 0) {
+          deleting = false;
+          roleIndex = (roleIndex + 1) % profile.roles.length;
+          delay = 320;
+        }
+        timer = setTimeout(tick, delay);
+      };
+
+      timer = setTimeout(tick, 180);
+    };
+
+    start();
+    motionPreference.addEventListener('change', start);
+    return () => {
+      clearTimeout(timer);
+      motionPreference.removeEventListener('change', start);
+    };
+  }, []);
+
+  return <><span className="role-typewriter" aria-hidden="true">{text}</span><span className="sr-only">{profile.roles.join('. ')}.</span></>;
+}
+
 function Hero() {
-  const [role, setRole] = useState(0);
-  useEffect(() => { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; const id = setInterval(() => setRole(r => (r + 1) % profile.roles.length), 3800); return () => clearInterval(id); }, []);
-  return <section id="home" className="hero container"><div className="hero-copy"><p className="eyebrow hero-eyebrow"><span className="tiny-line" /> HELLO, I’M</p><h1>Dwiky Christian<br /><span>Febriano.</span></h1><div className="role"><span className="code-chevron">&gt;</span><span key={role}>{profile.roles[role]}</span><span className="cursor" /></div><p className="hero-description">A Computer Science student at Universitas Multimedia Nusantara, passionate about building impactful software solutions, developing intelligent systems, and transforming ideas into meaningful digital experiences.</p><div className="hero-actions"><a href="#projects" className="button primary">Explore My Work <ArrowUpRight size={18} /></a><a href={profile.cv} download className="button secondary"><Download size={17} /> Download CV</a></div><div className="hero-social"><Socials /><span className="social-divider" /><span>Code. Create. Keep learning.</span></div></div><div className="hero-portrait"><div className="portrait-frame"><picture><source srcSet="/images/dwiky-profile.webp" type="image/webp" /><img src={profile.photo} alt="Dwiky Christian Febriano wearing his blue UMN blazer outdoors" fetchPriority="high" width="1247" height="1280" /></picture><div className="portrait-shade" /><div className="portrait-caption"><span><MapPin size={14} /> BASED IN INDONESIA</span><span>01 / INTRODUCTION</span></div></div><div className="portrait-corner top" /><div className="portrait-corner bottom" /><div className="availability"><span className="status-dot" /><div>Open to opportunities<small>Software Engineering Internships</small></div><ArrowUpRight size={18} /></div><span className="portrait-side-label">CURIOUS MIND. BUILDER AT HEART.</span></div><div className="hero-bottom"><a href="#about"><span className="scroll-icon"><ArrowDown size={15} /></span> Scroll to Explore</a><span>SOFTWARE ENGINEERING <i /> ARTIFICIAL INTELLIGENCE</span></div></section>;
+  return <section id="home" className="hero container"><div className="hero-copy"><p className="eyebrow hero-eyebrow"><span className="tiny-line" /> HELLO, I’M</p><h1>Dwiky Christian<br /><span>Febriano.</span></h1><div className="role"><span className="code-chevron">&gt;</span><TypewriterRole /><span className="cursor" /></div><p className="hero-description">A Computer Science student at Universitas Multimedia Nusantara, passionate about building impactful software solutions, developing intelligent systems, and transforming ideas into meaningful digital experiences.</p><div className="hero-actions"><a href="#projects" className="button primary">Explore My Work <ArrowUpRight size={18} /></a><a href={profile.cv} download className="button secondary"><Download size={17} /> Download CV</a></div><div className="hero-social"><Socials /><span className="social-divider" /><span>Code. Create. Keep learning.</span></div></div><div className="hero-portrait"><div className="portrait-frame"><picture><source srcSet="/images/dwiky-profile.webp" type="image/webp" /><img src={profile.photo} alt="Dwiky Christian Febriano wearing his blue UMN blazer outdoors" fetchPriority="high" width="1247" height="1280" /></picture><div className="portrait-shade" /><div className="portrait-caption"><span><MapPin size={14} /> BASED IN INDONESIA</span><span>01 / INTRODUCTION</span></div></div><div className="portrait-corner top" /><div className="portrait-corner bottom" /><div className="availability"><span className="status-dot" /><div>Open to opportunities<small>Software Engineering Internships</small></div><ArrowUpRight size={18} /></div><span className="portrait-side-label">CURIOUS MIND. BUILDER AT HEART.</span></div><div className="hero-bottom"><a href="#about"><span className="scroll-icon"><ArrowDown size={15} /></span> Scroll to Explore</a><span>SOFTWARE ENGINEERING <i /> ARTIFICIAL INTELLIGENCE</span></div></section>;
 }
 
 function About() { return <section id="about" className="section about"><div className="container reveal"><SectionHeading number="01" label="THE PERSON BEHIND THE CODE" title={<>A Little <span>About Me</span></>}>Driven by curiosity. Inspired by technology.</SectionHeading><div className="about-grid"><div className="biography"><p>I’m Dwiky Christian Febriano, a fifth-semester Computer Science student at <strong>Universitas Multimedia Nusantara</strong>, Indonesia, with a strong interest in Software Engineering, Artificial Intelligence, and modern application development.</p><p>Throughout my academic journey, I have contributed to <strong>more than 15 university projects</strong>. My experience spans web and mobile applications, deep learning research, game development, and collaborative technical projects.</p><p>I enjoy turning complex problems into practical solutions while growing my technical knowledge, creativity, and teamwork skills. Currently, I’m seeking opportunities to grow as a Software Engineer through real-world development experience, collaboration, and continuous learning.</p><a href="#contact" className="text-link">Let’s get to know each other <ArrowRight size={17} /></a></div><div className="education"><div className="education-top"><span className="icon-box"><GraduationCap /></span><span className="micro-label">EDUCATION</span></div><h3>Universitas Multimedia Nusantara</h3><p>Bachelor’s Degree in Computer Science</p><div className="education-bottom"><span>Aug 2024 — Aug 2028</span><span><MapPin size={14} /> Tangerang, Indonesia</span></div></div></div><div className="stats"><div><strong>15<span>+</span></strong><span>Academic Projects</span></div><div><Code2 /><strong className="stat-text">Computer Science</strong><span>Student at UMN</span></div><div><Cpu /><strong className="stat-text">Engineering & AI</strong><span>Areas of Focus</span></div></div></div></section>; }
