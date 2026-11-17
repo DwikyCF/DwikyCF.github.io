@@ -56,7 +56,7 @@ Reference: [Vite's official GitHub Pages deployment guide](https://vite.dev/guid
 - `index.html`: SEO title, description, social metadata, and Google Fonts.
 - `public/sitemap.xml` and `public/robots.txt`: public indexing metadata.
 
-All project visuals are explicitly labeled abstract concept illustrations, not product screenshots. Research metrics are reported experimental evaluations, not clinical performance claims. Budget Lens uses dummy data and simulated receipt extraction. Farm Guardian links to a Windows build repository, not a browser game. The company profile entry is an ongoing development project, not an employment claim. Review the ongoing status and semester description as time passes.
+Project visuals are abstract illustrations, not product screenshots. Research metrics are reported experimental evaluations, not clinical performance claims. Budget Lens uses dummy data and simulated receipt extraction. Farm Guardian links to a Windows build repository, not a browser game. The company profile entry is an ongoing development project, not an employment claim. Review the ongoing status and semester description as time passes.
 
 Only the fonts use an external CDN; the site works with system font fallbacks if it is unavailable. All image and PDF assets are local. Links to GitHub, LinkedIn, and the salon website are external. The email button opens the visitor's email application; copying an email requires a secure browser context (HTTPS or localhost), and displays a fallback message if clipboard access fails.
 
